@@ -13,7 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends Timestamped{
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "comment_id")
     private Long id;
 
@@ -23,17 +24,12 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "post_id'")
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account account;
 
     @Builder
-    public Comment(CommentRequestDto dto, Post post, Account account) {
+    public Comment(CommentRequestDto dto, Post post) {
         this.content = dto.getContent();
         this.post = post;
-        this.account = account;
         this.post.getComments().add(this);
-        this.account.getComments().add(this);
     }
 
     public void updateComment(CommentRequestDto dto) {
@@ -42,7 +38,6 @@ public class Comment extends Timestamped{
 
     public void deleteComment() {
         this.post.getComments().remove(this);
-        this.account.getComments().remove(this);
     }
 
 

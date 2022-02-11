@@ -18,7 +18,7 @@ import java.util.List;
 public class Post extends Timestamped {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "post_id")
     private Long id;
 
@@ -26,31 +26,25 @@ public class Post extends Timestamped {
     private String title;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account account;
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post(CreatePostRequestDto createDto, Account account) {
+    public Post(CreatePostRequestDto createDto) {
         this.title = createDto.getTitle();
         this.content = createDto.getContent();
-        this.account = account;
-        this.account.getPosts().add(this);
+        this.name = createDto.getName();
     }
 
     public void updatePost(UpdatePostRequestDto updateRequestDto) {
         this.title = updateRequestDto.getTitle();
-        this.account.updateAccount(updateRequestDto.getName());
+        this.name = updateRequestDto.getName();
         this.content = updateRequestDto.getContent();
-    }
-
-    public void deletePost() {
-        this.account.getPosts().remove(this);
     }
 
 }

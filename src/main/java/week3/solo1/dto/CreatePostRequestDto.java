@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class CreatePostRequestDto {
 
     private String title;
+    private String name;
     private String content;
 
 }
