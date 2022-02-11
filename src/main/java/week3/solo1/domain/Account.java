@@ -1,12 +1,10 @@
 package week3.solo1.domain;
-
-
-import com.sun.tools.javac.util.List;
 import lombok.*;
-import week3.solo1.dto.AccountJoinRequestDto;
+import week3.solo1.dto.JoinAccountRequestDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,7 +13,7 @@ public class Account {
 
     @Id
     @GeneratedValue
-    @Column("account_id")
+    @Column(name = "account_id")
     private Long id;
 
     private String name;
@@ -27,7 +25,7 @@ public class Account {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Account(AccountJoinRequestDto account) {
+    public Account(JoinAccountRequestDto account) {
         this.name = account.getName();
     }
 
